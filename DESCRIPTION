@@ -1,11 +1,11 @@
 Package: mixedStandardization
 Type: Package
-Title: What the Package Does (Title Case)
+Title: Standardization for variables of different types (continuous, binary, categorical) in sparse penalized regressions.
 Version: 0.1.0
-Author: Who wrote it
-Maintainer: The package maintainer <yourself@somewhere.net>
-Description: More about what it does (maybe more than one line)
-    Use four spaces when indenting paragraphs within the Description.
+Author: Xiang Li
+Maintainer: The package maintainer <xiangli@gwu.edu>
+Description: The package provides 5 standardization methods: Zscore, Gelman, Minmax, Bring, Mixed. The Mixed method is proposed 
+    by the author in the paper Standardization of Continuous and Categorical Covariates in Sparse Penalized Regressions.
 License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
@@ -13,4 +13,5 @@ RoxygenNote: 7.1.2
 Imports: 
     car,
     caret,
-    dplyr
+    dplyr,
+    stats

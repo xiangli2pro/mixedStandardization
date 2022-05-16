@@ -23,18 +23,18 @@ mixedStand(
 \item{standardization}{a character of specified standardization methods. Users can choose from 5 methods:
 `Zscore`, `Gelman`, `Minmax`, `Bring`, `Mixed`. The default is the `Mixed` method.}
 
-\item{continuousVars:}{either a character vector of continuous variable names, or a
+\item{continuousVars}{either a character vector of continuous variable names, or a
 numeric vector of continuous variable column indices.}
 
-\item{binaryVars:}{either a character vector of binary variable names, or a
+\item{binaryVars}{either a character vector of binary variable names, or a
 numeric vector of binary variable column indices.}
 
-\item{categoricalVars:}{either a character vector of categorical variable names, or a
+\item{categoricalVars}{either a character vector of categorical variable names, or a
 numeric vector of categorical variable column indices.}
 
-\item{pDichoto:}{threshold of converting continuous variable to binary variable.}
+\item{pDichoto}{threshold of converting continuous variable to binary variable.}
 
-\item{family:}{can be "binomial" for logistic regression and "gaussian" for linear regression.}
+\item{family}{can be "binomial" for logistic regression and "gaussian" for linear regression.}
 }
 \value{
 Standardized data.

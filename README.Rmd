@@ -13,9 +13,12 @@ knitr::opts_chunk$set(
   fig.path = "man/figures/README-",
   out.width = "100%"
 )
+
+library(badger)
 ```
 
 # mixedStandardization
+`r badge_repostatus("Active")` `r badge_github_actions("rossellhayes/ipa")` 
 
 <!-- badges: start -->
 <!-- badges: end -->

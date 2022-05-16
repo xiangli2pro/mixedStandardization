@@ -9,17 +9,20 @@
 #' @param y outcome variable.
 #' @param standardization a character of specified standardization methods. Users can choose from 5 methods:
 #' `Zscore`, `Gelman`, `Minmax`, `Bring`, `Mixed`. The default is the `Mixed` method.
-#' @param continuousVars: either a character vector of continuous variable names, or a
+#' @param continuousVars either a character vector of continuous variable names, or a
 #' numeric vector of continuous variable column indices.
-#' @param binaryVars: either a character vector of binary variable names, or a
+#' @param binaryVars either a character vector of binary variable names, or a
 #' numeric vector of binary variable column indices.
-#' @param categoricalVars: either a character vector of categorical variable names, or a
+#' @param categoricalVars either a character vector of categorical variable names, or a
 #' numeric vector of categorical variable column indices.
-#' @param pDichoto: threshold of converting continuous variable to binary variable.
-#' @param family: can be "binomial" for logistic regression and "gaussian" for linear regression.
+#' @param pDichoto threshold of converting continuous variable to binary variable.
+#' @param family can be "binomial" for logistic regression and "gaussian" for linear regression.
 #'
 #' @return Standardized data.
 #' \item{xStand}{standardized data}
+#'
+#' @importFrom dplyr %>% mutate_all mutate_at select all_of
+#' @importFrom stats predict
 #'
 #' @export
 #' @rdname mixedStand
@@ -188,7 +191,7 @@ mixedStand <- function(
     xDummies <- caret::dummyVars(~., data = xRaw, fullRank = T)
     xStand <- predict(xDummies, xRaw) %>%
       as.data.frame() %>%
-      mutate_all(., function(var) var / sd(var, na.rm = TRUE))
+      mutate_all(., function(var) var / stats::sd(var, na.rm = TRUE))
 
   } else if(standardization == "Gelman"){
 
@@ -197,7 +200,7 @@ mixedStand <- function(
     # then convert binary/categorical to dummy variables
 
     xStand0 <- xRaw %>%
-      mutate_at(c(continuousVars), function(var) var / 2 / sd(var, na.rm = TRUE))
+      mutate_at(c(continuousVars), function(var) var / 2 / stats::sd(var, na.rm = TRUE))
     xDummies <- caret::dummyVars(~., data = xStand0, fullRank = T)
     xStand <- predict(xDummies, xStand0) %>%
       as.data.frame()
@@ -224,8 +227,8 @@ mixedStand <- function(
     xStand0 <- predict(xDummies, xRaw) %>%
       as.data.frame()
 
-    varVif <- car::vif(lm(y ~ ., data = data.frame(y, xStand0)))
-    partialStand <- sapply(xStand0, sd, na.rm = TRUE)/ sqrt(varVif)* sqrt(nrow(xStand0)-1)/ sqrt(nrow(xStand0) - ncol(xStand0))
+    varVif <- car::vif(stats::lm(y ~ ., data = data.frame(y, xStand0)))
+    partialStand <- sapply(xStand0, stats::sd, na.rm = TRUE)/ sqrt(varVif)* sqrt(nrow(xStand0)-1)/ sqrt(nrow(xStand0) - ncol(xStand0))
 
     xStand <- xStand0 %>%
       sweep(2, partialStand, `/`) %>%
@@ -239,7 +242,7 @@ mixedStand <- function(
 
     xStand <- xRaw %>%
       mutate_at(categoricalVars, function(var) categorical2binary(var, y, pDichoto, family)) %>%
-      mutate_at(continuousVars, function(var) ifelse(var <= quantile(var, probs = pDichoto), 1, 0)) %>%
+      mutate_at(continuousVars, function(var) ifelse(var <= stats::quantile(var, probs = pDichoto), 1, 0)) %>%
       mutate_at(binaryVars, function(var) {
         bi_index <- (var == unique(var)[which.min(table(var))[1]])
         var_stand <- vector(length = length(var))
@@ -247,12 +250,15 @@ mixedStand <- function(
         var_stand[!bi_index] <- 0
         var_stand
       }) %>%
-      mutate_all(., function(var) var/ 2/ sd(var, na.rm = TRUE))
+      mutate_all(., function(var) var/ 2/ stats::sd(var, na.rm = TRUE))
   }
 
   # return standardized input
   xStand
 }
+
+## global define the variable .
+utils::globalVariables(".")
 
 ## transform categorical variable to binary variable
 categorical2binary <- function(var, y, pDichoto, family) {
@@ -270,9 +276,9 @@ categorical2binary <- function(var, y, pDichoto, family) {
   lrt_test <- function(var, y) {
 
     mod <- data.frame(y, var) %>%
-      glm(y ~ var, data = ., family = family)
+      stats::glm(y ~ var, data = ., family = family)
 
-    lrt <- anova(mod, test = "LRT")
+    lrt <- stats::anova(mod, test = "LRT")
 
     # check if P-value less then 0.05
     lrt[2, 5] < 0.05
@@ -283,8 +289,8 @@ categorical2binary <- function(var, y, pDichoto, family) {
 
     # coefficients
     mod_coef <- data.frame(y, var) %>%
-      glm(y ~ var, data = ., family = family) %>%
-      coef()
+      stats::glm(y ~ var, data = ., family = family) %>%
+      stats::coef()
 
     # add into the reference level effect
     mod_coef[2:length(mod_coef)] <- mod_coef[2:length(mod_coef)] + mod_coef[1]

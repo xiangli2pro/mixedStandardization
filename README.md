@@ -3,6 +3,12 @@
 
 # mixedStandardization
 
+[![Project Status: Active - The project has reached a stable, usable
+state and is being actively
+developed.](https://www.repostatus.org/badges/latest/active.svg)](https://www.repostatus.org/#active)
+[![R build
+status](https://github.com/rossellhayes/ipa/workflows/R-CMD-check/badge.svg)](https://github.com/rossellhayes/ipa/actions)
+
 <!-- badges: start -->
 <!-- badges: end -->
 
@@ -106,11 +112,11 @@ x_Mixed <- mixedStand(
 )
 
 head(x_Mixed)
-#>                        mpg     disp        vs       am       cyl    gear
-#> Mazda RX4         0.000000 0.984251 0.0000000 0.000000 0.0000000 0.00000
-#> Mazda RX4 Wag     0.000000 0.984251 0.0000000 0.000000 0.0000000 0.00000
-#> Datsun 710        0.000000 0.984251 0.9920317 0.000000 0.0000000 0.00000
-#> Hornet 4 Drive    0.000000 0.000000 0.9920317 1.002022 0.0000000 1.01653
-#> Hornet Sportabout 0.986179 0.000000 0.0000000 1.002022 0.9920317 1.01653
-#> Valiant           0.986179 0.000000 0.9920317 1.002022 0.0000000 1.01653
+#>                        mpg     disp        vs       am       cyl     gear
+#> Mazda RX4         0.000000 0.984251 0.0000000 0.000000 0.9920317 0.986179
+#> Mazda RX4 Wag     0.000000 0.984251 0.0000000 0.000000 0.9920317 0.986179
+#> Datsun 710        0.000000 0.984251 0.9920317 0.000000 0.9920317 0.986179
+#> Hornet 4 Drive    0.000000 0.000000 0.9920317 1.002022 0.9920317 0.000000
+#> Hornet Sportabout 0.986179 0.000000 0.0000000 1.002022 0.0000000 0.000000
+#> Valiant           0.986179 0.000000 0.9920317 1.002022 0.9920317 0.000000
 ```
